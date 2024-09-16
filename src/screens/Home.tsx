@@ -9,6 +9,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <Text>Test Update 7</Text>
       <Text>Test Update 6</Text>
       <Text>Test Update 5</Text>
       <Text>Test Update 4</Text>

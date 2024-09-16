@@ -1,0 +1,69 @@
+name: EAS / Release / Expo Update
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (for app.json). Eg: 1.1.7'
+        required: false
+        type: string
+
+jobs:
+  build:
+    name: Checkout and EAS Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: yarn
+          cache-dependency-path: '**/yarn.lock'
+
+      - name: Print version strings
+        run: |
+          CURRENT_APP_JSON_VERSION=$(jq -r '.expo.version' app.json)
+          USER_SUPPLIED_APP_JSON_VERSION=${{ github.event.inputs.version }}
+          echo "Current App version: ${CURRENT_APP_JSON_VERSION}; You entered: ${USER_SUPPLIED_APP_JSON_VERSION}"
+
+      - name: Allow difference only in PATCH version in the supplied version string
+        if: github.event.inputs.version
+        run: |
+          CURRENT_APP_JSON_VERSION=$(jq -r '.expo.version' app.json)
+          MAJOR_MINOR=${CURRENT_APP_JSON_VERSION%.*}
+          VERSION=${{ github.event.inputs.version }}
+          
+          if [[ ! "$VERSION" =~ ^"${MAJOR_MINOR}" ]]; then
+            echo "Invalid supplied app version: ${VERSION}. Only ${MAJOR_MINOR}.X versions are allowed."
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Update app.json (if supplied version is different)
+        if: github.event.inputs.version
+        run: |
+          CURRENT_APP_JSON_VERSION=$(jq -r '.expo.version' app.json)
+          VERSION=${{ github.event.inputs.version }}
+
+          if [[ "${CURRENT_APP_JSON_VERSION}" != "${VERSION}" ]]; then
+            echo "Detected a different app.json version. Updating app.json..."
+            jq --arg version "$VERSION" '.expo.version = $version' app.json > app.temp.json
+            mv app.temp.json app.json
+          else
+            echo "app.json version is unchanged"
+          fi
+
+      - name: Print current version in app.json
+        run: |
+          EAS_UPDATE_APP_JSON_VERSION=$(jq -r '.expo.version' app.json)
+          echo "app.json version before eas update is = ${EAS_UPDATE_APP_JSON_VERSION}"
+
+      - name: Perform eas update (workflow dispatch)
+        run: NODE_OPTIONS="--max-old-space-size=8192" eas update --channel=production --message="$(git log -1 --pretty=%B)"

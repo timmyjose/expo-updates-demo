@@ -9,6 +9,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <Text>Test Update 2</Text>
       <Text>Test Update 1</Text>
       <Pressable
         style={styles.button}

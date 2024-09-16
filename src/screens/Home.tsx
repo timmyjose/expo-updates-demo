@@ -9,6 +9,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <Text>Test Update 1</Text>
       <Pressable
         style={styles.button}
         onPress={() => navigaton.navigate('DummyScreen')}>

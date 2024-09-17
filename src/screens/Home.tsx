@@ -1,11 +1,14 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Pressable, Alert } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../App'
+import { SERVER_URL } from '../config'
 
 const Home = () => {
   const navigaton = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+
+  Alert.alert(`SERVER_URL = ${SERVER_URL}`)
 
   return (
     <View style={styles.container}>

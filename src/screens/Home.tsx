@@ -12,6 +12,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <Text>Update 2</Text>
       <Text>Update 1</Text>
       <Pressable
         style={styles.button}

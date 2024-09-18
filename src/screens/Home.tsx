@@ -12,10 +12,6 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Update 4</Text>
-      <Text>Update 3</Text>
-      <Text>Update 2</Text>
-      <Text>Update 1</Text>
       <Pressable
         style={styles.button}
         onPress={() => navigaton.navigate('DummyScreen')}>

@@ -12,6 +12,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <Text>Update only for 1.3.1</Text>
       <Text>Update for v1.3.x</Text>
       <Pressable
         style={styles.button}

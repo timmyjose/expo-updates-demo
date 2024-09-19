@@ -19,15 +19,14 @@ jobs:
           cache: yarn
           cache-dependency-path: '**/yarn.lock'
 
-      # - name: Install dependencies
-      #   run: yarn install
+      - name: Install dependencies
+        run: yarn install
 
-      # - name: Setup Expo and EAS
-      #   uses: expo/expo-github-action@v8
-      #   with:
-      #     eas-version: latest
-      #     token: ${{ secrets.EXPO_TOKEN }}
-
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: (Major-Minor Release supplied) eas update flow
         if: ${{ github.event.inputs.version }}
@@ -64,6 +63,7 @@ jobs:
 
             # perform eas update
             echo "Performing eas update for version: ${PATCH_RELEASE}"
+            NODE_OPTIONS="--max-old-space-size=8192" eas update --channel=production --message="$(git log -1 --pretty=%B)"
 
             # update the source maps
             echo "Updating sourcemap for version: ${PATCH_RELEASE}"

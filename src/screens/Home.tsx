@@ -10,6 +10,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <Text>Update for all v1.3.x releases</Text>
       <Pressable
         style={styles.button}
         onPress={() => navigaton.navigate('DummyScreen')}>

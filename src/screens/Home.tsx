@@ -9,6 +9,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <Text>Testing eas update only for 1.3.1 release</Text>
       <Text>Testing eas update for all 1.3.x releases</Text>
       <Pressable
         style={styles.button}

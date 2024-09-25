@@ -43,7 +43,7 @@ jobs:
           fi
 
           # get all the patch releases for this major-minor release
-          RELEASES_JSON_FILE="src/app.json"
+          RELEASES_JSON_FILE="app.json"
           PATCHES_KEY=".releases.\"release-${RELEASE}\""
           PATCHES_VAL=$( jq -r "${PATCHES_KEY}[]" "${RELEASES_JSON_FILE}" 2>/dev/null)
 
